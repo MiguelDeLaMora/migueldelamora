@@ -1,4 +1,7 @@
+import { AiFillBehanceCircle } from "react-icons/ai";
 import "./App.css";
+import { FiGithub, FiLinkedin, FiDribbble } from "react-icons/fi";
+import { SiBehance } from "react-icons/si";
 
 export default function App() {
   return (
@@ -18,36 +21,66 @@ export default function App() {
 
       {/* Hero */}
       <main className="mx-auto w-full max-w-5xl px-6">
-        <section className="pt-16 pb-20">
-          <p className="mb-4 text-sm text-neutral-400">
-            Frontend • UX • Product mindset
-          </p>
+        <section className="relative pt-24 pb-32">
+  <div className="max-w-6xl">
+    {/* Headline */}
+    <h1 className="text-[clamp(3rem,8vw,7rem)] font-extrabold leading-[0.95] tracking-tight">
+      <span className="block">FRONTEND</span>
+      <span className="block italic text-blue-500">DEVELOPER</span>
+      <span className="block">
+        & PRODUCT{" "}
+        <span className="text-blue-500">DESIGNER</span>
+      </span>
+    </h1>
 
-          <h1 className="max-w-3xl text-4xl font-semibold leading-tight tracking-tight md:text-6xl">
-            Product-focused Frontend Developer
-          </h1>
+    {/* CTA */}
+    <div className="mt-12 flex flex-wrap items-center gap-6">
+      <a
+        href="#contact"
+        className="inline-flex items-center gap-3 rounded-full border border-neutral-700 px-7 py-3 text-sm font-semibold hover:border-neutral-500"
+      >
+        Contact me
+      </a>
 
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-neutral-300">
-            With a background in Industrial Design. I build fast, thoughtful web
-            experiences and I’m evolving toward software and native apps.
-          </p>
+      <a
+        href="#"
+        className="inline-flex items-center gap-3 text-sm font-semibold text-neutral-300 hover:text-white"
+      >
+        Download CV
+        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 text-neutral-950">
+          ↗
+        </span>
+      </a>
+    </div>
+  </div>
 
-          <div className="mt-8 flex gap-4">
-            <a
-              href="#work"
-              className="rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-neutral-950 hover:bg-neutral-200"
-            >
-              View work
-            </a>
+  {/* Socials (lado derecho) */}
+  <div className="absolute right-6 top-1/2 hidden -translate-y-1/2 flex-col gap-5 md:flex">
+  <a
+    href="https://www.linkedin.com/in/TU-USUARIO"
+    target="_blank"
+    className="text-neutral-400 transition hover:text-blue-500"
+  >
+    <FiLinkedin size={20} />
+  </a>
 
-            <a
-              href="#contact"
-              className="rounded-xl border border-neutral-700 px-5 py-2.5 text-sm font-semibold text-neutral-100 hover:border-neutral-500"
-            >
-              Contact
-            </a>
-          </div>
-        </section>
+  <a
+    href="https://github.com/migueldelamora"
+    target="_blank"
+    className="text-neutral-400 transition hover:text-white"
+  >
+    <FiGithub size={20} />
+  </a>
+
+  <a
+    href="https://www.behance.net/TU-USUARIO"
+    target="_blank"
+    className="text-neutral-400 transition hover:text-blue-500"
+  >
+    <SiBehance size={20} />
+  </a>
+</div>
+</section>
 
         {/* Placeholder sections */}
         <section id="work" className="py-20">
