@@ -1,109 +1,292 @@
-import { motion, type Variants } from "framer-motion";
+import { motion } from "framer-motion";
+import { useState } from "react";
 
 type AboutSectionProps = {
   darkMode: boolean;
 };
 
-const container: Variants = {
-  hidden: {},
-  show: {
-    transition: { staggerChildren: 0.08, delayChildren: 0.06 },
-  },
-};
+const stats = [
+  { number: "3+", label: "Years Experience" },
+  { number: "20+", label: "Projects Delivered" },
+  { number: "100%", label: "Client Satisfaction" },
+];
 
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 14 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.2, 0.8, 0.2, 1] } },
-};
+const chips = [
+  "Creative Frontend",
+  "Product-minded",
+  "Design × Engineering",
+  "Interactive UI",
+];
 
-export default function AboutSection({ darkMode }: AboutSectionProps) {
-  const primary = darkMode ? "#F0F0F0" : "#444684";
-  const secondary = darkMode ? "rgba(240,240,240,0.72)" : "rgba(68,70,132,0.72)";
-  const hairline = darkMode ? "rgba(240,240,240,0.14)" : "rgba(68,70,132,0.18)";
-  const chipBg = darkMode ? "rgba(255,255,255,0.04)" : "rgba(68,70,132,0.05)";
-  const chipBorder = darkMode ? "rgba(240,240,240,0.14)" : "rgba(68,70,132,0.16)";
+function StatCard({ 
+  stat, 
+  index, 
+  darkMode 
+}: { 
+  stat: { number: string; label: string }; 
+  index: number; 
+  darkMode: boolean;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <section className="w-full">
-      <motion.div
-        className="mx-auto w-full max-w-7xl px-8 md:px-12 lg:px-16 py-24 md:py-28"
-        variants={container}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.2 }}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ 
+        duration: 0.6, 
+        delay: index * 0.1,
+        ease: [0.16, 1, 0.3, 1] 
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="text-center"
+    >
+      <motion.h3
+        className="text-5xl md:text-6xl lg:text-7xl font-light tracking-tight"
+        style={{
+          fontFamily: "Inter, sans-serif",
+          color: darkMode ? "#f0f0f0" : "#444684",
+        }}
+        animate={{
+          scale: isHovered ? 1.05 : 1,
+        }}
+        transition={{ duration: 0.3 }}
       >
-        {/* Top hairline */}
-        <motion.div variants={fadeUp} className="h-px w-full" style={{ backgroundColor: hairline }} />
+        {stat.number}
+      </motion.h3>
+      <p
+        className="mt-3 text-xs uppercase tracking-[0.2em] font-medium"
+        style={{
+          color: darkMode ? "rgba(240, 240, 240, 0.5)" : "rgba(68, 70, 132, 0.5)",
+        }}
+      >
+        {stat.label}
+      </p>
+    </motion.div>
+  );
+}
 
-        <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
-          {/* Left: title */}
-          <motion.div variants={fadeUp} className="lg:col-span-5">
-            <p className="text-xs uppercase tracking-[0.32em]" style={{ color: secondary }}>
+export default function About({ darkMode }: AboutSectionProps) {
+  return (
+    <section
+      className="w-full py-24 md:py-32 lg:py-40 px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20"
+      style={{
+        backgroundColor: darkMode ? "#202020" : "#E4E4E4",
+        transition: "background-color 0.35s ease-out",
+      }}
+    >
+      <div className="max-w-7xl mx-auto">
+        {/* Divider line */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          className="h-px w-full mb-16 md:mb-24 origin-left"
+          style={{
+            backgroundColor: darkMode ? "rgba(255, 255, 255, 0.1)" : "rgba(68, 70, 132, 0.1)",
+          }}
+        />
+
+        {/* Main Grid - Two columns */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 xl:gap-20">
+          
+          {/* LEFT: Visual + Stats */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {/* Eyebrow */}
+            <p
+              className="text-[10px] md:text-xs uppercase tracking-[0.3em] md:tracking-[0.4em] font-medium mb-6"
+              style={{
+                color: darkMode ? "rgba(240, 240, 240, 0.5)" : "rgba(68, 70, 132, 0.5)",
+                fontFamily: "Inter, sans-serif",
+              }}
+            >
               ABOUT
             </p>
 
+            {/* Title */}
             <h2
-              className="mt-4 text-4xl md:text-5xl lg:text-6xl font-normal tracking-[-0.02em]"
-              style={{ color: primary, fontFamily: "Inter, sans-serif" }}
+              className="text-4xl md:text-5xl lg:text-6xl font-normal mb-8 tracking-tight leading-[1.1]"
+              style={{
+                fontFamily: "Inter, sans-serif",
+                color: darkMode ? "#f0f0f0" : "#444684",
+                letterSpacing: "-0.02em",
+              }}
             >
               A bit about me
             </h2>
 
-            {/* Small “profile chips” */}
-            <div className="mt-8 flex flex-wrap gap-2">
-              {["Creative Frontend", "Product-minded", "Design x Engineering"].map((t) => (
-                <span
-                  key={t}
-                  className="inline-flex items-center rounded-full px-3 py-1 text-xs tracking-[0.16em] uppercase"
-                  style={{ color: secondary, background: chipBg, border: `1px solid ${chipBorder}` }}
+            {/* Image placeholder - Reemplaza con tu foto */}
+            <motion.div
+              className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden mb-8"
+              style={{
+                backgroundColor: darkMode ? "rgba(255, 255, 255, 0.05)" : "rgba(68, 70, 132, 0.05)",
+                border: `1px solid ${darkMode ? "rgba(255, 255, 255, 0.1)" : "rgba(68, 70, 132, 0.1)"}`,
+              }}
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.4 }}
+            >
+              {/* Placeholder pattern */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <p
+                  className="text-sm uppercase tracking-widest"
+                  style={{
+                    color: darkMode ? "rgba(240, 240, 240, 0.3)" : "rgba(68, 70, 132, 0.3)",
+                  }}
                 >
-                  {t}
-                </span>
+                  Your photo here
+                </p>
+              </div>
+              
+              {/* Gradient overlay */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  background: darkMode 
+                    ? "linear-gradient(to bottom, transparent 60%, rgba(32, 32, 32, 0.8))"
+                    : "linear-gradient(to bottom, transparent 60%, rgba(228, 228, 228, 0.8))"
+                }}
+              />
+            </motion.div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-6">
+              {stats.map((stat, index) => (
+                <StatCard 
+                  key={stat.label} 
+                  stat={stat} 
+                  index={index} 
+                  darkMode={darkMode}
+                />
               ))}
             </div>
           </motion.div>
 
-          {/* Right: narrative */}
-          <motion.div variants={container} className="lg:col-span-7">
-            <motion.p
-              variants={fadeUp}
-              className="text-base md:text-lg leading-relaxed"
-              style={{ color: secondary }}
-            >
-              I’m a creative frontend developer focused on building structured, intentional digital experiences. My
-              background in marketing and web development shaped the way I think about clarity, performance and visual
-              impact.
-            </motion.p>
+          {/* RIGHT: Content */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+            className="flex flex-col justify-center"
+          >
+            {/* Chips */}
+            <div className="flex flex-wrap gap-2 mb-8">
+              {chips.map((chip, index) => (
+                <motion.span
+                  key={chip}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ 
+                    duration: 0.4, 
+                    delay: 0.3 + index * 0.05,
+                    ease: [0.16, 1, 0.3, 1] 
+                  }}
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  className="inline-block px-4 py-2 rounded-full text-xs uppercase tracking-wider font-medium"
+                  style={{
+                    backgroundColor: darkMode ? "rgba(255, 255, 255, 0.05)" : "rgba(68, 70, 132, 0.05)",
+                    border: `1px solid ${darkMode ? "rgba(255, 255, 255, 0.1)" : "rgba(68, 70, 132, 0.1)"}`,
+                    color: darkMode ? "rgba(240, 240, 240, 0.7)" : "rgba(68, 70, 132, 0.7)",
+                  }}
+                >
+                  {chip}
+                </motion.span>
+              ))}
+            </div>
 
-            <motion.p
-              variants={fadeUp}
-              className="mt-6 text-base md:text-lg leading-relaxed"
-              style={{ color: secondary }}
+            {/* Text content */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="space-y-6"
             >
-              I started building marketing-driven websites, but over time I became more interested in systems,
-              interaction and product thinking. Today, I’m focused on bridging design and engineering through thoughtful
-              frontend architecture.
-            </motion.p>
+              <p
+                className="text-base md:text-lg lg:text-xl leading-relaxed"
+                style={{
+                  color: darkMode ? "rgba(240, 240, 240, 0.7)" : "rgba(68, 70, 132, 0.7)",
+                  fontFamily: "Inter, sans-serif",
+                  fontWeight: 300,
+                }}
+              >
+                I'm a creative frontend developer focused on building structured, 
+                intentional digital experiences. My background in marketing and web 
+                development shaped the way I think about clarity, performance and 
+                visual impact.
+              </p>
 
-            <motion.p
-              variants={fadeUp}
-              className="mt-6 text-base md:text-lg leading-relaxed"
-              style={{ color: secondary }}
+              <p
+                className="text-base md:text-lg lg:text-xl leading-relaxed"
+                style={{
+                  color: darkMode ? "rgba(240, 240, 240, 0.7)" : "rgba(68, 70, 132, 0.7)",
+                  fontFamily: "Inter, sans-serif",
+                  fontWeight: 300,
+                }}
+              >
+                I started building marketing-driven websites, but over time I became 
+                more interested in systems, interaction and product thinking. Today, 
+                I'm focused on bridging design and engineering through thoughtful 
+                frontend architecture.
+              </p>
+
+              <p
+                className="text-base md:text-lg lg:text-xl leading-relaxed"
+                style={{
+                  color: darkMode ? "rgba(240, 240, 240, 0.7)" : "rgba(68, 70, 132, 0.7)",
+                  fontFamily: "Inter, sans-serif",
+                  fontWeight: 300,
+                }}
+              >
+                Currently exploring interactive interfaces, 3D, and performance-driven 
+                frontend development. Looking to collaborate on ambitious digital 
+                products where design and code work together.
+              </p>
+            </motion.div>
+
+            {/* CTA / Status */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="mt-10 flex items-center gap-4"
             >
-              Currently exploring interactive interfaces, 3D, and performance-driven frontend development. Looking to
-              collaborate on ambitious digital products where design and code work together.
-            </motion.p>
-
-            {/* Bottom meta line */}
-            <motion.div variants={fadeUp} className="mt-10 flex items-center gap-3">
-              <div className="h-px flex-1" style={{ backgroundColor: hairline }} />
-              <span className="text-xs uppercase tracking-[0.32em]" style={{ color: secondary }}>
-                Open to opportunities
-              </span>
+              <div
+                className="h-px flex-1"
+                style={{
+                  backgroundColor: darkMode ? "rgba(255, 255, 255, 0.1)" : "rgba(68, 70, 132, 0.1)",
+                }}
+              />
+              <div className="flex items-center gap-2">
+                <div
+                  className="w-2 h-2 rounded-full animate-pulse"
+                  style={{
+                    backgroundColor: darkMode ? "#E8B059" : "#444684",
+                  }}
+                />
+                <span
+                  className="text-xs uppercase tracking-[0.2em] font-medium"
+                  style={{
+                    color: darkMode ? "rgba(240, 240, 240, 0.6)" : "rgba(68, 70, 132, 0.6)",
+                  }}
+                >
+                  Open to opportunities
+                </span>
+              </div>
             </motion.div>
           </motion.div>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

@@ -3,6 +3,7 @@ import ProcessApproach from './components/ProcessApproach'
 import Projects from './components/Projects'
 import About from './components/About'
 import Contact from './components/Contact'
+import StackSection from './components/StackSection'
 import { useState } from 'react'
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
       <Hero darkMode={darkMode} setDarkMode={setDarkMode} />
       <Projects darkMode={darkMode} />
       <ProcessApproach darkMode={darkMode} />
+      <StackSection darkMode={darkMode} />
       <About darkMode={darkMode} />
       <Contact darkMode={darkMode} />
     </>
