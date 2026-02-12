@@ -125,36 +125,26 @@ export default function About({ darkMode }: AboutSectionProps) {
 
             {/* Image placeholder - Reemplaza con tu foto */}
             <motion.div
-              className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden mb-8"
-              style={{
-                backgroundColor: darkMode ? "rgba(255, 255, 255, 0.05)" : "rgba(68, 70, 132, 0.05)",
-                border: `1px solid ${darkMode ? "rgba(255, 255, 255, 0.1)" : "rgba(68, 70, 132, 0.1)"}`,
-              }}
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.4 }}
-            >
-              {/* Placeholder pattern */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <p
-                  className="text-sm uppercase tracking-widest"
-                  style={{
-                    color: darkMode ? "rgba(240, 240, 240, 0.3)" : "rgba(68, 70, 132, 0.3)",
-                  }}
-                >
-                  Your photo here
-                </p>
-              </div>
-              
-              {/* Gradient overlay */}
-              <div
-                className="absolute inset-0"
-                style={{
-                  background: darkMode 
-                    ? "linear-gradient(to bottom, transparent 60%, rgba(32, 32, 32, 0.8))"
-                    : "linear-gradient(to bottom, transparent 60%, rgba(228, 228, 228, 0.8))"
-                }}
-              />
-            </motion.div>
+  className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden mb-8"
+  style={{
+    backgroundColor: darkMode
+      ? "rgba(255,255,255,0.05)"
+      : "rgba(68,70,132,0.05)",
+    border: `1px solid ${
+      darkMode
+        ? "rgba(255,255,255,0.1)"
+        : "rgba(68,70,132,0.1)"
+    }`,
+  }}
+  whileHover={{ scale: 1.02 }}
+  transition={{ duration: 0.4, ease: "easeOut" }}
+>
+  <img
+    src="src/assets/images/miguel-climbing.jpg"
+    alt="Miguel de la Mora climbing"
+    className="absolute inset-0 w-full h-full object-cover"
+  />
+</motion.div>
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-6">
@@ -250,6 +240,17 @@ export default function About({ darkMode }: AboutSectionProps) {
                 Currently exploring interactive interfaces, 3D, and performance-driven 
                 frontend development. Looking to collaborate on ambitious digital 
                 products where design and code work together.
+              </p>
+
+              <p
+                className="text-base md:text-lg lg:text-xl leading-relaxed"
+                style={{
+                  color: darkMode ? "rgba(240, 240, 240, 0.7)" : "rgba(68, 70, 132, 0.7)",
+                  fontFamily: "Inter, sans-serif",
+                  fontWeight: 300,
+                }}
+              >
+                Also, I climb mountains.
               </p>
             </motion.div>
 

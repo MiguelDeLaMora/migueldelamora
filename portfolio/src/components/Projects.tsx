@@ -15,18 +15,18 @@ interface Project {
 const projects: Project[] = [
   {
     id: 1,
-    title: "Project Alpha",
-    subtitle: "E-commerce Platform",
+    title: "Epicus",
+    subtitle: "Real Estate Website",
     stack: ["WordPress", "Elementor", "Figma"],
-    image: "/projects/project1.jpg", // Reemplaza con tu ruta
+    image: "src/assets/images/epicus-mockup.png", // Reemplaza con tu ruta
     link: "/projects/alpha"
   },
   {
     id: 2,
-    title: "Project Beta",
-    subtitle: "Corporate Website",
+    title: "Jerome & Zimmerman",
+    subtitle: "Branding Agency",
     stack: ["WordPress", "CSS", "Photoshop"],
-    image: "/projects/project2.jpg",
+    image: "src/assets/images/project2.jpg",
     link: "/projects/beta"
   },
   {
