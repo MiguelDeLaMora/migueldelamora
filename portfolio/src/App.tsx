@@ -57,7 +57,7 @@ export default function App() {
   {/* Socials (lado derecho) */}
   <div className="absolute right-6 top-1/2 hidden -translate-y-1/2 flex-col gap-5 md:flex">
   <a
-    href="https://www.linkedin.com/in/TU-USUARIO"
+    href="https://www.linkedin.com/in/miguel-de-la-mora"
     target="_blank"
     className="text-neutral-400 transition hover:text-blue-500"
   >
