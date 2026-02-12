@@ -123,7 +123,7 @@ export default function About({ darkMode }: AboutSectionProps) {
               A bit about me
             </h2>
 
-            {/* Image placeholder - Reemplaza con tu foto */}
+            {/* Image placeholder */}
             <motion.div
   className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden mb-8"
   style={{
@@ -140,7 +140,7 @@ export default function About({ darkMode }: AboutSectionProps) {
   transition={{ duration: 0.4, ease: "easeOut" }}
 >
   <img
-    src="src/assets/images/miguel-climbing.jpg"
+    src="/public/images/miguel-climbing.jpg"
     alt="Miguel de la Mora climbing"
     className="absolute inset-0 w-full h-full object-cover"
   />

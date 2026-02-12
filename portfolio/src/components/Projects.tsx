@@ -18,7 +18,7 @@ const projects: Project[] = [
     title: "Epicus",
     subtitle: "Real Estate Website",
     stack: ["WordPress", "Elementor", "Figma"],
-    image: "src/assets/images/epicus-mockup.png",
+    image: "/public/images/epicus-mockup.png",
     link: "https://epicus.com.mx/inicio-demo/"
   },
   {
@@ -26,7 +26,7 @@ const projects: Project[] = [
     title: "Jerome & Zimmerman",
     subtitle: "Branding Agency",
     stack: ["WordPress", "CSS", "Photoshop"],
-    image: "src/assets/images/jerome-and-zimmerman.png",
+    image: "/public/images/jerome-and-zimmerman.png",
     link: "https://jeromeandzimmerman.com/"
   },
   {
@@ -34,7 +34,7 @@ const projects: Project[] = [
     title: "ISGO Tech",
     subtitle: "Manufacturing Solutions",
     stack: ["Elementor", "HTML", "JavaScript"],
-    image: "src/assets/images/isgo-mockup.png",
+    image: "/public/images/isgo-mockup.png",
     link: "https://isgo.tech/en/"
   },
   {
@@ -42,7 +42,7 @@ const projects: Project[] = [
     title: "Clasik",
     subtitle: "Furniture Design",
     stack: ["Elementor", "WordPress", "CSS"],
-    image: "src/assets/images/clasik-mockup.png",
+    image: "/public/images/clasik-mockup.png",
     link: "https://clasik.com.mx/"
   },
   {
@@ -50,7 +50,7 @@ const projects: Project[] = [
     title: "Grupo FAC",
     subtitle: "Construction",
     stack: ["Figma", "Elementor", "CSS"],
-    image: "src/assets/images/grupo-fac-mockup.png",
+    image: "/public/images/grupo-fac-mockup.png",
     link: "https://grupofac.com/"
   },
   {
@@ -58,7 +58,7 @@ const projects: Project[] = [
     title: "Testo Rocket",
     subtitle: "Supplements",
     stack: ["Figma", "Elementor", "Shopify"],
-    image: "src/assets/images/testo-rocket-mockup.png",
+    image: "/public/images/testo-rocket-mockup.png",
     link: "https://testorocket.mx/"
   }
 ];
@@ -231,7 +231,7 @@ export default function Projects({ darkMode }: { darkMode: boolean }) {
               letterSpacing: "-0.02em",
             }}
           >
-            SELECTED PROJECTS
+            Selected Projects
           </h2>
         </motion.div>
 
