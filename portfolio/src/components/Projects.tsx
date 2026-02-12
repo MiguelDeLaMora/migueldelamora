@@ -11,55 +11,55 @@ interface Project {
   link: string;
 }
 
-// Datos de ejemplo - reemplaza con tus proyectos
+// Proyect Data
 const projects: Project[] = [
   {
     id: 1,
     title: "Epicus",
     subtitle: "Real Estate Website",
     stack: ["WordPress", "Elementor", "Figma"],
-    image: "src/assets/images/epicus-mockup.png", // Reemplaza con tu ruta
-    link: "/projects/alpha"
+    image: "src/assets/images/epicus-mockup.png",
+    link: "https://epicus.com.mx/inicio-demo/"
   },
   {
     id: 2,
     title: "Jerome & Zimmerman",
     subtitle: "Branding Agency",
     stack: ["WordPress", "CSS", "Photoshop"],
-    image: "src/assets/images/project2.jpg",
-    link: "/projects/beta"
+    image: "src/assets/images/jerome-and-zimmerman.png",
+    link: "https://jeromeandzimmerman.com/"
   },
   {
     id: 3,
-    title: "Project Gamma",
-    subtitle: "Portfolio Redesign",
-    stack: ["Figma", "HTML", "JavaScript"],
-    image: "/projects/project3.jpg",
-    link: "/projects/gamma"
+    title: "ISGO Tech",
+    subtitle: "Manufacturing Solutions",
+    stack: ["Elementor", "HTML", "JavaScript"],
+    image: "src/assets/images/isgo-mockup.png",
+    link: "https://isgo.tech/en/"
   },
   {
     id: 4,
-    title: "Project Delta",
-    subtitle: "Landing Page",
+    title: "Clasik",
+    subtitle: "Furniture Design",
     stack: ["Elementor", "WordPress", "CSS"],
-    image: "/projects/project4.jpg",
-    link: "/projects/delta"
+    image: "src/assets/images/clasik-mockup.png",
+    link: "https://clasik.com.mx/"
   },
   {
     id: 5,
-    title: "Project Epsilon",
-    subtitle: "Brand Identity",
-    stack: ["Figma", "Illustrator", "Photoshop"],
-    image: "/projects/project5.jpg",
-    link: "/projects/epsilon"
+    title: "Grupo FAC",
+    subtitle: "Construction",
+    stack: ["Figma", "Elementor", "CSS"],
+    image: "src/assets/images/grupo-fac-mockup.png",
+    link: "https://grupofac.com/"
   },
   {
     id: 6,
-    title: "Project Zeta",
-    subtitle: "Mobile App Design",
-    stack: ["Figma", "Sketch", "Principle"],
-    image: "/projects/project6.jpg",
-    link: "/projects/zeta"
+    title: "Testo Rocket",
+    subtitle: "Supplements",
+    stack: ["Figma", "Elementor", "Shopify"],
+    image: "src/assets/images/testo-rocket-mockup.png",
+    link: "https://testorocket.mx/"
   }
 ];
 
@@ -69,6 +69,8 @@ function ProjectCard({ project, index, darkMode }: { project: Project; index: nu
   return (
     <motion.a
       href={project.link}
+      target="_blank"
+      rel="noopener noreferrer"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -77,7 +79,7 @@ function ProjectCard({ project, index, darkMode }: { project: Project; index: nu
       onMouseLeave={() => setIsHovered(false)}
       className="group relative block overflow-hidden rounded-2xl cursor-pointer"
       style={{
-        aspectRatio: "4/5",
+        aspectRatio: "5/4.5",
         backgroundColor: darkMode ? "rgba(255, 255, 255, 0.03)" : "rgba(68, 70, 132, 0.03)",
         backdropFilter: "blur(10px)",
         border: `1px solid ${darkMode ? "rgba(255, 255, 255, 0.1)" : "rgba(68, 70, 132, 0.1)"}`,
@@ -86,7 +88,7 @@ function ProjectCard({ project, index, darkMode }: { project: Project; index: nu
       {/* Imagen de fondo */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          className="w-full h-full bg-cover bg-center"
+          className="w-full h-full bg-contain bg-no-repeat bg-top"
           style={{
             backgroundImage: `url(${project.image})`,
             backgroundColor: darkMode ? "#2a2a2a" : "#d0d0d0", // Placeholder mientras carga
@@ -103,7 +105,7 @@ function ProjectCard({ project, index, darkMode }: { project: Project; index: nu
           style={{
             background: darkMode 
               ? "linear-gradient(to bottom, rgba(32, 32, 32, 0.3), rgba(32, 32, 32, 0.9))"
-              : "linear-gradient(to bottom, rgba(228, 228, 228, 0.3), rgba(228, 228, 228, 0.9))"
+  : "linear-gradient(to bottom, rgba(228, 228, 228, 0.08), rgba(228, 228, 228, 0.35))"
           }}
           animate={{
             opacity: isHovered ? 1 : 0.8,
@@ -167,7 +169,7 @@ function ProjectCard({ project, index, darkMode }: { project: Project; index: nu
 
         {/* Arrow indicator */}
         <motion.div
-          className="absolute top-6 right-6"
+          className="absolute top-61 right-6"
           animate={{
             x: isHovered ? 5 : 0,
             y: isHovered ? -5 : 0,
@@ -202,6 +204,17 @@ export default function Projects({ darkMode }: { darkMode: boolean }) {
       }}
     >
       <div className="max-w-7xl mx-auto">
+
+        {/* Eyebrow */}
+          <p
+            className="text-[10px] md:text-xs uppercase tracking-[0.3em] md:tracking-[0.4em] font-medium mb-6 md:mb-8"
+            style={{
+              color: darkMode ? "rgba(240, 240, 240, 0.5)" : "rgba(68, 70, 132, 0.5)",
+              fontFamily: "Inter, sans-serif",
+            }}
+          >
+            PORTFOLIO
+          </p>
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -211,11 +224,11 @@ export default function Projects({ darkMode }: { darkMode: boolean }) {
           className="mb-16 md:mb-24"
         >
           <h2
-            className="text-4xl md:text-5xl lg:text-6xl font-normal tracking-wider"
+            className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-normal mb-8 md:mb-10 tracking-tight leading-[1.1]"
             style={{
               fontFamily: "Inter, sans-serif",
               color: darkMode ? "#f0f0f0" : "#444684",
-              letterSpacing: "0.15em",
+              letterSpacing: "-0.02em",
             }}
           >
             SELECTED PROJECTS

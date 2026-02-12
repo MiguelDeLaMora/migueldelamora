@@ -113,13 +113,13 @@ export default function About({ darkMode }: AboutSectionProps) {
 
             {/* Title */}
             <h2
-              className="text-4xl md:text-5xl lg:text-6xl font-normal mb-8 tracking-tight leading-[1.1]"
-              style={{
-                fontFamily: "Inter, sans-serif",
-                color: darkMode ? "#f0f0f0" : "#444684",
-                letterSpacing: "-0.02em",
-              }}
-            >
+            className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-normal mb-8 md:mb-10 tracking-tight leading-[1.1]"
+            style={{
+              fontFamily: "Inter, sans-serif",
+              color: darkMode ? "#f0f0f0" : "#444684",
+              letterSpacing: "-0.02em",
+            }}
+          >
               A bit about me
             </h2>
 

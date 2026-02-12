@@ -210,7 +210,7 @@ export default function Stack({ darkMode }: StackSectionProps) {
 
           {/* Title */}
           <h2
-            className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-normal tracking-tight leading-[1.1] max-w-4xl"
+            className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-normal mb-8 md:mb-10 tracking-tight leading-[1.1]"
             style={{
               fontFamily: "Inter, sans-serif",
               color: darkMode ? "#f0f0f0" : "#444684",
