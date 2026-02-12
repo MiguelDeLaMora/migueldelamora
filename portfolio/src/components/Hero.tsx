@@ -1,279 +1,248 @@
-import { motion } from 'framer-motion';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Sphere, MeshDistortMaterial, Float } from '@react-three/drei';
-import { Suspense } from 'react';
-import WobbleScene from "ui/WobbleScene";
+import * as THREE from "three";
+import { useEffect, useRef, useState, Suspense } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import {
+  ContactShadows,
+  Environment,
+  MeshDistortMaterial,
+  OrbitControls,
+  PerspectiveCamera,
+} from "@react-three/drei";
+import { useSpring as useSpringThree, a as a3 } from "@react-spring/three";
+import { a, useSpring as useSpringWeb } from "@react-spring/web";
+import { motion } from "framer-motion";
 
+// Wrap de drei material para animarlo con react-spring (igual que el sandbox)
+const AnimatedMaterial = a3(MeshDistortMaterial);
 
-// Componente 3D animado - Esferas orgánicas deformadas
-function AnimatedSphere() {
-  return (
-    <Float speed={1.5} rotationIntensity={1} floatIntensity={2}>
-      <Sphere args={[1, 100, 200]} scale={2.5} position={[2, 0, -1]}>
-        <MeshDistortMaterial
-          color="#444684"
-          attach="material"
-          distort={0.8}
-          speed={2}
-          roughness={0.05}
-          metalness={0.05}
-          transparent={true}
-          opacity={0.35}
-          clearcoat={1}
-          clearcoatRoughness={0}
-        />
-      </Sphere>
-    </Float>
-  );
-}
+function Scene({
+  setDarkMode,
+}: {
+  setDarkMode: (v: boolean) => void;
+}) {
+  const sphere = useRef<THREE.Mesh>(null!);
+  const light = useRef<THREE.PointLight>(null!);
 
-// Esferas flotantes adicionales - Más orgánicas
-function FloatingOrbs() {
+  const [mode, setMode] = useState(false);
+  const [down, setDown] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  
+  // ✅ Estado reactivo para baseScale que se actualiza con resize
+  const [baseScale, setBaseScale] = useState(() => {
+    const width = window.innerWidth;
+    if (width < 640) return 1.8;        // Mobile más grande
+    if (width < 768) return 1.0;        // Mobile grande
+    if (width < 1024) return 1.8;       // Tablet
+    return 1.25;                         // Desktop
+  });
+
+  // ✅ Listener de resize para actualizar baseScale
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 640) setBaseScale(1.0);
+      else if (width < 768) setBaseScale(1.0);
+      else if (width < 1024) setBaseScale(1.1);
+      else setBaseScale(1.25);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Cursor igual que el sandbox
+  useEffect(() => {
+    document.body.style.cursor = hovered
+      ? "none"
+      : `url("data:image/svg+xml;base64,${btoa(
+          '<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="10" fill="#E8B059"/></svg>'
+        )}"), auto`;
+
+    return () => {
+      document.body.style.cursor = "auto";
+    };
+  }, [hovered]);
+
+  // Follow mouse + floating
+  useFrame((state) => {
+    light.current.position.x = state.mouse.x * 20;
+    light.current.position.y = state.mouse.y * 20;
+
+    if (sphere.current) {
+      sphere.current.position.x = THREE.MathUtils.lerp(
+        sphere.current.position.x,
+        hovered ? state.mouse.x / 2 : 0,
+        0.2
+      );
+
+      sphere.current.position.y = THREE.MathUtils.lerp(
+        sphere.current.position.y,
+        Math.sin(state.clock.elapsedTime / 1.5) / 6 + (hovered ? state.mouse.y / 2 : 0),
+        0.2
+      );
+    }
+  });
+
+  // Springs (three)
+  const [springs, api] = useSpringThree(() => ({
+    wobble: 1,
+    coat: 1,
+    ambient: 0.5,
+    env: 1,
+    color: "white",
+  }));
+
+  useEffect(() => {
+    api.start({
+      wobble: down ? 1.2 : hovered ? 1.05 : 1,
+      coat: mode && !hovered ? 0.04 : 1,
+      ambient: mode && !hovered ? 1.5 : 0.5,
+      env: mode && !hovered ? 0.4 : 1,
+      color: hovered ? "#E8B059" : mode ? "#202020" : "white",
+      config: hovered
+        ? { mass: 2, tension: 1000, friction: 10 }
+        : { mass: 1, tension: 170, friction: 26 },
+    });
+  }, [api, mode, hovered, down]);
+
   return (
     <>
-      {/* Esfera grande izquierda */}
-      <Float speed={1.8} rotationIntensity={0.5} floatIntensity={1.5}>
-        <Sphere args={[0.8, 64, 64]} position={[-2.5, -0.5, 0]}>
-          <MeshDistortMaterial
-            color="#444684"
-            distort={0.7}
-            speed={1.5}
-            roughness={0.05}
-            metalness={0.05}
-            transparent={true}
-            opacity={0.3}
-            clearcoat={1}
-            clearcoatRoughness={0}
-          />
-        </Sphere>
-      </Float>
+      <PerspectiveCamera makeDefault position={[0, 0, 4]} fov={75}>
+        <a3.ambientLight intensity={springs.ambient} />
+        <a3.pointLight
+          ref={light}
+          position-z={-15}
+          intensity={springs.env}
+          color="#F8C069"
+        />
+      </PerspectiveCamera>
 
-      {/* Esfera pequeña arriba derecha */}
-      <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
-        <Sphere args={[0.5, 64, 64]} position={[3, 2, -2]}>
-          <MeshDistortMaterial
-            color="#444684"
-            distort={0.6}
-            speed={1.8}
-            roughness={0.05}
-            metalness={0.05}
-            transparent={true}
-            opacity={0.28}
-            clearcoat={1}
+      <Suspense fallback={null}>
+        <a3.mesh
+          ref={sphere}
+          scale={springs.wobble.to((w) => w * baseScale) as any}
+          onPointerOver={() => setHovered(true)}
+          onPointerOut={() => setHovered(false)}
+          onPointerDown={() => setDown(true)}
+          onPointerUp={() => {
+            setDown(false);
+            setMode((m) => {
+              const next = !m;
+              setDarkMode(next);
+              return next;
+            });
+          }}
+        >
+          <sphereGeometry args={[1, 64, 64]} />
+          <AnimatedMaterial
+            color={springs.color}
+            envMapIntensity={springs.env}
+            clearcoat={springs.coat}
             clearcoatRoughness={0}
+            metalness={0.1}
+            distort={0.35}
+            speed={2}
           />
-        </Sphere>
-      </Float>
+        </a3.mesh>
 
-      {/* Esfera pequeña abajo izquierda */}
-      <Float speed={2.2} rotationIntensity={0.3} floatIntensity={2}>
-        <Sphere args={[0.4, 64, 64]} position={[-3, -2, -1]}>
-          <MeshDistortMaterial
-            color="#444684"
-            distort={0.5}
-            speed={1.6}
-            roughness={0.05}
-            metalness={0.05}
-            transparent={true}
-            opacity={0.25}
-            clearcoat={1}
-            clearcoatRoughness={0}
-          />
-        </Sphere>
-      </Float>
+        <Environment preset="warehouse" />
+
+        <ContactShadows
+          rotation={[Math.PI / 2, 0, 0]}
+          position={[0, -1.6, 0]}
+          opacity={mode ? 0.8 : 0.4}
+          width={15}
+          height={15}
+          blur={2.5}
+          far={1.6}
+        />
+      </Suspense>
     </>
   );
 }
 
-const Hero = () => {
+export default function Hero() {
+  // Estado global para el texto + fondo real
+  const [darkMode, setDarkMode] = useState(false);
+
   return (
-    <>
-      <style>{`
-        /* Asegurar que el canvas no cause problemas */
-        canvas {
-          outline: none;
-        }
-      `}</style>
-
-      <section className="relative min-h-screen w-full overflow-hidden" style={{ backgroundColor: '#E4E4E4' }}>
-        
-        {/* React Three Fiber 3D Background */}
-        <div className="absolute inset-0 z-0">
-          <Canvas
-            camera={{ position: [0, 0, 5], fov: 75 }}
-            style={{ background: 'transparent' }}
-          >
-            <Suspense fallback={null}>
-              {/* Luces - Ajustadas para fondo claro */}
-              <ambientLight intensity={0.8} />
-              <directionalLight position={[10, 10, 5]} intensity={1.2} />
-              <pointLight position={[-10, -10, -5]} intensity={0.6} color="#444684" />
-              <pointLight position={[10, 10, 10]} intensity={0.4} color="#444684" />
-              
-              {/* Esfera principal animada */}
-              <AnimatedSphere />
-              
-              {/* Esferas flotantes adicionales */}
-              <FloatingOrbs />
-              
-              {/* Controles para rotar con el mouse (opcional) */}
-              <OrbitControls
-                enableZoom={false}
-                enablePan={false}
-                autoRotate
-                autoRotateSpeed={0.5}
-                maxPolarAngle={Math.PI / 2}
-                minPolarAngle={Math.PI / 2}
-              />
-            </Suspense>
-          </Canvas>
-          
-          {/* Overlay sutil para depth */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/20" />
-        </div>
-
-       {/* Content */}
-<div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6">
-
-  {/* Main heading - centrado */}
-  <motion.div
-    initial={{ opacity: 0, y: 30 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.8, delay: 0.3 }}
-    className="text-center"
-  >
-    <h1
-      className="text-7xl md:text-8xl lg:text-9xl font-bold tracking-wider leading-tight"
-      style={{
-        color: "#444684",
-        fontFamily: "Inter, sans-serif",
-        letterSpacing: "0.7em",
-        fontWeight: '400',
-        lineHeight: "1.6em"
-      }}
+    <main 
+      style={{ 
+        backgroundColor: darkMode ? "#202020" : "#E4E4E4",
+        transition: 'background-color 0.35s ease-out'
+      }} 
+      className="min-h-screen w-full overflow-hidden"
     >
-      HI, I'M
-      <br />
-      MIGUEL
-    </h1>
-  </motion.div>
-
-  {/* Info block - abajo y más a la derecha */}
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.8, delay: 0.5 }}
-    className="mt-16 w-full max-w-7xl flex justify-end"
-  >
-    <div className="text-left space-y-6">
-      {/* Roles */}
-      <div className="space-y-1">
-        <p className="text-sm md:text-[1rem] tracking-widest uppercase"
-           style={{ color: "#444684", letterSpacing: "0.25em", fontWeight: "400" }}>
-          FRONT END DEVELOPER
-        </p>
-        <p className="text-sm md:text-[1rem] tracking-widest font-light uppercase"
-           style={{ color: "#444684", letterSpacing: "0.25em", fontWeight: "400" }}>
-          PRODUCT DESIGNER
-        </p>
-      </div>
-
-      {/* Contact */}
-      <div className="space-y-1">
-        <p className="text-xs tracking-wider font-light uppercase break-all"
-           style={{ color: "#444684", letterSpacing: "0.12em", fontWeight: "300" }}>
-          MIGUELALEJANDRODELOMORAAROCHA@GMAIL.COM
-        </p>
-        <p className="text-xs tracking-wider font-light uppercase"
-           style={{ color: "#444684", letterSpacing: "0.12em", fontWeight: "300" }}>
-          MIGUEL DE LA MORA
-        </p>
-      </div>
-    </div>
-  </motion.div>
-
-</div>
-
-        {/* CTAs en la parte inferior */}
-        <div className="absolute bottom-0 left-0 right-0 z-10 flex justify-center pb-20 px-6 pointer-events-none">
+      <div className="min-h-screen w-full flex flex-col lg:grid lg:grid-cols-2">
+        {/* IZQUIERDA: TEXTO */}
+        <motion.div
+          className="relative z-10 flex flex-col justify-center px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-12 sm:py-16 lg:py-0 pointer-events-none order-2 lg:order-1"
+          animate={{ color: darkMode ? "#f0f0f0" : "#444684" }}
+          transition={{ duration: 0.35, ease: "easeOut" }}
+        >
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.9 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center pointer-events-auto"
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-left w-full"
           >
-            {/* Primary CTA */}
-            <motion.a
-              href="#projects"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="group relative px-8 py-4 text-white font-semibold rounded-full overflow-hidden transition-all duration-300 shadow-lg hover:shadow-xl"
-              style={{ backgroundColor: '#444684' }}
+            <h1
+              className="text-6xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl 2xl:text-9xl leading-[1.1] sm:leading-tight w-full"
+              style={{
+                fontFamily: "Inter, sans-serif",
+                letterSpacing: "0.25em",
+                fontWeight: 400,
+              }}
             >
-              <span className="relative z-10 flex items-center gap-2">
-                Ver mis proyectos
-                <motion.span
-                  animate={{ x: [0, 5, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  →
-                </motion.span>
-              </span>
-              
-              <motion.div
-                className="absolute inset-0"
-                style={{ background: 'linear-gradient(to right, #444684, #5a5fa0)' }}
-                initial={{ x: '-100%' }}
-                whileHover={{ x: 0 }}
-                transition={{ duration: 0.3 }}
-              />
-            </motion.a>
-
-            {/* Secondary CTA */}
-            <motion.a
-              href="#contact"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 text-white font-semibold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
-              style={{ backgroundColor: '#444684' }}
-            >
-              Contactar
-            </motion.a>
+              HI, I'M
+              <br />
+              MIGUEL
+            </h1>
           </motion.div>
-        </div>
 
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1 }}
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 pointer-events-none"
-        >
           <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="flex flex-col items-center gap-2"
-            style={{ color: '#444684' }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="mt-8 sm:mt-10 md:mt-12 max-w-xl"
           >
-            <span className="text-sm">Scroll</span>
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 14l-7 7m0 0l-7-7m7 7V3"
-              />
-            </svg>
+            <div className="text-left space-y-4 sm:space-y-6">
+              {/* Títulos */}
+              <div className="space-y-1">
+                <p className="text-xs sm:text-sm md:text-base uppercase tracking-[0.2em] sm:tracking-[0.25em] font-medium">
+                  FRONT END DEVELOPER
+                </p>
+                <p className="text-xs sm:text-sm md:text-base uppercase tracking-[0.2em] sm:tracking-[0.25em] font-medium">
+                  PRODUCT DESIGNER
+                </p>
+              </div>
+
+              {/* Contacto */}
+              <div className="space-y-1">
+                <p className="text-[10px] sm:text-xs uppercase tracking-[0.1em] sm:tracking-[0.12em] break-all font-light">
+                  MIGUELALEJANDRODELOMORAAROCHA@GMAIL.COM
+                </p>
+                <p className="text-[10px] sm:text-xs uppercase tracking-[0.1em] sm:tracking-[0.12em] font-light">
+                  MIGUEL DE LA MORA
+                </p>
+              </div>
+            </div>
           </motion.div>
         </motion.div>
-      </section>
-    </>
-  );
-};
 
-export default Hero;
+        {/* DERECHA: CANVAS */}
+        <div className="relative h-[50vh] sm:h-[55vh] md:h-[60vh] lg:h-screen order-1 lg:order-2">
+          <Canvas className="h-full w-full" dpr={[1, 2]}>
+            <Scene setDarkMode={setDarkMode} />
+            <OrbitControls
+              enablePan={false}
+              enableZoom={false}
+              maxPolarAngle={Math.PI / 2}
+              minPolarAngle={Math.PI / 2}
+            />
+          </Canvas>
+        </div>
+      </div>
+    </main>
+  );
+}
