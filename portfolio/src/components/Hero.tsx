@@ -9,7 +9,7 @@ import {
   PerspectiveCamera,
 } from "@react-three/drei";
 import { useSpring as useSpringThree, a as a3 } from "@react-spring/three";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Wrap de drei material para animarlo con react-spring (igual que el sandbox)
 const AnimatedMaterial = a3(MeshDistortMaterial);
@@ -160,9 +160,26 @@ function Scene({
   );
 }
 
-export default function Hero() {
-  // Estado global para el texto + fondo real
-  const [darkMode, setDarkMode] = useState(false);
+export default function Hero({ 
+  darkMode, 
+  setDarkMode 
+}: { 
+  darkMode: boolean; 
+  setDarkMode: (v: boolean) => void 
+}) {
+  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
+
+  // ✅ Detectar scroll para ocultar/mostrar el indicador
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      // Mostrar si está arriba (menos de 100px de scroll)
+      setShowScrollIndicator(scrollY < 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <main 
@@ -170,7 +187,7 @@ export default function Hero() {
         backgroundColor: darkMode ? "#202020" : "#E4E4E4",
         transition: 'background-color 0.35s ease-out'
       }} 
-      className="min-h-screen w-full overflow-hidden"
+      className="min-h-screen w-full overflow-hidden relative"
     >
       <div className="min-h-screen w-full flex flex-col lg:grid lg:grid-cols-2 lg:gap-0">
         {/* IZQUIERDA: TEXTO */}
@@ -191,6 +208,7 @@ export default function Hero() {
               style={{
                 fontFamily: "Inter, sans-serif",
                 letterSpacing: "0.25em",
+                lineHeight: "1.3em",
                 fontWeight: 400,
               }}
             >
@@ -243,6 +261,43 @@ export default function Hero() {
           </Canvas>
         </div>
       </div>
+
+      {/* Scroll Indicator */}
+      <AnimatePresence>
+        {showScrollIndicator && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 pointer-events-none"
+          >
+            <motion.span
+              className="text-xs uppercase tracking-widest font-light"
+              style={{ color: darkMode ? "#f0f0f0" : "#444684" }}
+              animate={{ opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              Scroll
+            </motion.span>
+            
+            <motion.svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={darkMode ? "#f0f0f0" : "#444684"}
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <path d="M12 5v14M19 12l-7 7-7-7" />
+            </motion.svg>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }
