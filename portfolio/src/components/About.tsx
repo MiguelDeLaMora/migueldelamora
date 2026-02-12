@@ -140,7 +140,7 @@ export default function About({ darkMode }: AboutSectionProps) {
   transition={{ duration: 0.4, ease: "easeOut" }}
 >
   <img
-    src="/public/images/miguel-climbing.jpg"
+    src="public/miguel-climbing.jpg"
     alt="Miguel de la Mora climbing"
     className="absolute inset-0 w-full h-full object-cover"
   />
