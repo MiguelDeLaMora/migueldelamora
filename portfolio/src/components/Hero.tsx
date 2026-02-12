@@ -9,7 +9,6 @@ import {
   PerspectiveCamera,
 } from "@react-three/drei";
 import { useSpring as useSpringThree, a as a3 } from "@react-spring/three";
-import { a, useSpring as useSpringWeb } from "@react-spring/web";
 import { motion } from "framer-motion";
 
 // Wrap de drei material para animarlo con react-spring (igual que el sandbox)
