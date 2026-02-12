@@ -9,6 +9,7 @@ import {
   PerspectiveCamera,
 } from "@react-three/drei";
 import { useSpring as useSpringThree, a as a3 } from "@react-spring/three";
+import { a, useSpring as useSpringWeb } from "@react-spring/web";
 import { motion } from "framer-motion";
 
 // Wrap de drei material para animarlo con react-spring (igual que el sandbox)
@@ -29,9 +30,9 @@ function Scene({
   // ✅ Estado reactivo para baseScale que se actualiza con resize
   const [baseScale, setBaseScale] = useState(() => {
     const width = window.innerWidth;
-    if (width < 640) return 1.8;        // Mobile más grande
+    if (width < 640) return 1.0;        // Mobile más grande
     if (width < 768) return 1.0;        // Mobile grande
-    if (width < 1024) return 1.8;       // Tablet
+    if (width < 1024) return 1.1;       // Tablet
     return 1.25;                         // Desktop
   });
 
@@ -172,12 +173,13 @@ export default function Hero() {
       }} 
       className="min-h-screen w-full overflow-hidden"
     >
-      <div className="min-h-screen w-full flex flex-col lg:grid lg:grid-cols-2">
+      <div className="min-h-screen w-full flex flex-col lg:grid lg:grid-cols-2 lg:gap-0">
         {/* IZQUIERDA: TEXTO */}
         <motion.div
           className="relative z-10 flex flex-col justify-center px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-12 sm:py-16 lg:py-0 pointer-events-none order-2 lg:order-1"
           animate={{ color: darkMode ? "#f0f0f0" : "#444684" }}
           transition={{ duration: 0.35, ease: "easeOut" }}
+          style={{ backgroundColor: 'transparent' }}
         >
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -230,8 +232,8 @@ export default function Hero() {
         </motion.div>
 
         {/* DERECHA: CANVAS */}
-        <div className="relative h-[50vh] sm:h-[55vh] md:h-[60vh] lg:h-screen order-1 lg:order-2">
-          <Canvas className="h-full w-full" dpr={[1, 2]}>
+        <div className="relative h-[50vh] sm:h-[55vh] md:h-[60vh] lg:h-screen order-1 lg:order-2" style={{ margin: 0, padding: 0, border: 'none' }}>
+          <Canvas className="h-full w-full" dpr={[1, 2]} style={{ display: 'block' }}>
             <Scene setDarkMode={setDarkMode} />
             <OrbitControls
               enablePan={false}

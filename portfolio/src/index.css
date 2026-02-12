@@ -6,3 +6,21 @@
   html, body, #root { height: 100%; }
 }
 
+/* Eliminar gaps y líneas entre secciones */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+canvas {
+  display: block;
+  outline: none;
+}
