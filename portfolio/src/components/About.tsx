@@ -1,6 +1,13 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 
+// Al inicio del archivo, después de los imports
+const getAssetUrl = (path: string) => {
+  // En dev: /projects/image.jpg
+  // En prod: /tu-repo/projects/image.jpg
+  return `${import.meta.env.BASE_URL}${path}`;
+};
+
 type AboutSectionProps = {
   darkMode: boolean;
 };
@@ -140,7 +147,7 @@ export default function About({ darkMode }: AboutSectionProps) {
   transition={{ duration: 0.4, ease: "easeOut" }}
 >
   <img
-    src="public/miguel-climbing.jpg"
+    src={getAssetUrl("projects/miguel-climbing.jpg")}
     alt="Miguel de la Mora climbing"
     className="absolute inset-0 w-full h-full object-cover"
   />

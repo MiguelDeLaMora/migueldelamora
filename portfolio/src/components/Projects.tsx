@@ -2,6 +2,13 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 
+// Al inicio del archivo, después de los imports
+const getAssetUrl = (path: string) => {
+  // En dev: /projects/image.jpg
+  // En prod: /tu-repo/projects/image.jpg
+  return `${import.meta.env.BASE_URL}${path}`;
+};
+
 interface Project {
   id: number;
   title: string;
@@ -18,7 +25,7 @@ const projects: Project[] = [
     title: "Epicus",
     subtitle: "Real Estate Website",
     stack: ["WordPress", "Elementor", "Figma"],
-    image: "./public/epicus-mockup.png",
+    image: getAssetUrl("projects/epicus-mockup.png"),
     link: "https://epicus.com.mx/inicio-demo/"
   },
   {
@@ -26,7 +33,7 @@ const projects: Project[] = [
     title: "Jerome & Zimmerman",
     subtitle: "Branding Agency",
     stack: ["WordPress", "CSS", "Photoshop"],
-    image: "./public/jerome-and-zimmerman.png",
+    image: getAssetUrl("projects/jerome-and-zimmerman.png"),
     link: "https://jeromeandzimmerman.com/"
   },
   {
@@ -34,7 +41,7 @@ const projects: Project[] = [
     title: "ISGO Tech",
     subtitle: "Manufacturing Solutions",
     stack: ["Elementor", "HTML", "JavaScript"],
-    image: "./public/isgo-mockup.png",
+    image: getAssetUrl("projects/isgo-mockup.png"),
     link: "https://isgo.tech/en/"
   },
   {
@@ -42,7 +49,7 @@ const projects: Project[] = [
     title: "Clasik",
     subtitle: "Furniture Design",
     stack: ["Elementor", "WordPress", "CSS"],
-    image: "./public/clasik-mockup.png",
+    image: getAssetUrl("projects/clasik-mockup.png"),
     link: "https://clasik.com.mx/"
   },
   {
@@ -50,7 +57,7 @@ const projects: Project[] = [
     title: "Grupo FAC",
     subtitle: "Construction",
     stack: ["Figma", "Elementor", "CSS"],
-    image: "./public/grupo-fac-mockup.png",
+    image: getAssetUrl("projects/grupo-fac-mockup.png"),
     link: "https://grupofac.com/"
   },
   {
@@ -58,7 +65,7 @@ const projects: Project[] = [
     title: "Testo Rocket",
     subtitle: "Supplements",
     stack: ["Figma", "Elementor", "Shopify"],
-    image: "./public/testo-rocket-mockup.png",
+    image: getAssetUrl("projects/testo-rocket-mockup.png"),
     link: "https://testorocket.mx/"
   }
 ];
