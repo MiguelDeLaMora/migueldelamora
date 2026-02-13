@@ -246,7 +246,7 @@ export default function Contact({ darkMode }: ContactSectionProps) {
                 fontFamily: "Inter, sans-serif",
               }}
             >
-              © 2026 · Made with React, TypeScript & Three.js
+              © 2026
             </p>
           </motion.div>
         </div>
