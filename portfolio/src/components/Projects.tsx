@@ -26,7 +26,7 @@ const projects: Project[] = [
     subtitle: "Real Estate Website",
     stack: ["Next.js", "Sanity CMS", "Design System"],
     image: getAssetUrl("projects/epicus-mockup.png"),
-    link: "https://epicus.com.mx/inicio-demo/"
+    link: "https://epicus.com.mx/"
   },
   {
     id: 2,
