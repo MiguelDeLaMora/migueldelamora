@@ -24,7 +24,7 @@ const projects: Project[] = [
     id: 1,
     title: "Epicus",
     subtitle: "Real Estate Website",
-    stack: ["WordPress", "Elementor", "Figma"],
+    stack: ["Next.js", "Sanity CMS", "Design System"],
     image: getAssetUrl("projects/epicus-mockup.png"),
     link: "https://epicus.com.mx/inicio-demo/"
   },
@@ -86,7 +86,7 @@ function ProjectCard({ project, index, darkMode }: { project: Project; index: nu
       onMouseLeave={() => setIsHovered(false)}
       className="group relative block overflow-hidden rounded-2xl cursor-pointer"
       style={{
-        aspectRatio: "5/4.5",
+        aspectRatio: "4.95/5",
         backgroundColor: darkMode ? "rgba(255, 255, 255, 0.03)" : "rgba(68, 70, 132, 0.03)",
         backdropFilter: "blur(10px)",
         border: `1px solid ${darkMode ? "rgba(255, 255, 255, 0.1)" : "rgba(68, 70, 132, 0.1)"}`,
